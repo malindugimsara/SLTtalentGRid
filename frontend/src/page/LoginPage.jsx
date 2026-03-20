@@ -78,16 +78,6 @@ export default function LoginPage() {
               className="w-full h-11 px-4 bg-[#F8F9FA] border border-[#E0E0E0] rounded-lg text-sm text-[#2C3E50] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D16BA5] transition-all"
             />
           </div>
-
-          <div className="w-full text-right mb-4">
-            {/* <button
-              className="text-[#2C3E50] hover:text-[#D16BA5] text-sm font-semibold transition-colors duration-300 mt-5"
-              onClick={() => navigate("/forgotpassword")}
-            >
-              Forgot password?
-            </button> */}
-          </div>
-
           <div className="w-full space-y-4">
             <button
               onClick={handleLogin}

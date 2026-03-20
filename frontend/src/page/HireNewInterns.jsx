@@ -163,7 +163,7 @@ const HireNewInterns = () => {
       return new Date(b.starting_date) - new Date(a.starting_date);
     });
     
-    navigate("/enhanced-filtering", { state: { filteredInterns: sortedByStartingDate } });
+    navigate("/rank_cvs", { state: { filteredInterns: sortedByStartingDate } });
   };
 
   // Check if at least one filter is applied to enable submit button

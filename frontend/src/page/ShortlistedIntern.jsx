@@ -351,9 +351,7 @@ SLTMobitel`;
           </div>
         )}
         
-        {/* ========================================================= */}
-        {/* EMAIL CUSTOMIZATION MODAL (Tailwind) */}
-        {/* ========================================================= */}
+        {/* EMAIL CUSTOMIZATION MODAL */}
         {showEmailModal && (
           <div className="fixed inset-0 bg-gray-900/70 backdrop-blur-sm z-[100] flex justify-center items-center p-4 sm:p-6" onClick={closeEmailModal}>
             <div className="bg-white w-full max-w-4xl max-h-[95vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200" onClick={(e) => e.stopPropagation()}>

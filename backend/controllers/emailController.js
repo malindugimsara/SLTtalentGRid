@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// ES Modules wala __dirname hadaganna me lines deka oni wenawa
+// Create __dirname in ES Modules 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -217,14 +217,14 @@ export const updateInternStatus = async (req, res) => {
     }
 };
 
-// Aluth Function Eka: Email yawala intern wa Hired karana eka
+// Send email with hiring details and update intern status to "Hired" in DB
 export const hireIntern = async (req, res) => {
     try {
         const internId = req.params.id;
         const { deadline_date, email_subject, email_body, use_default_attachment } = req.body;
-        const uploadedFile = req.file; // Multer eken ena file eka
+        const uploadedFile = req.file; 
 
-        // 1. Database eken intern wa hoyagannawa
+        // 1. Find intern in data base
         const intern = await Intern.findById(internId);
         if (!intern) {
             return res.status(404).json({ success: false, message: 'Intern not found' });
@@ -232,18 +232,18 @@ export const hireIntern = async (req, res) => {
 
         const internEmail = intern.email || intern.senderEmail;
 
-        // 2. Nodemailer Transporter eka hadanawa (Gmail wenuwen)
+        // 2. Create Nodemailer Transporter 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_APP_PASSWORD // Gmail App Password eka .env eke thiyenna oni
+                pass: process.env.EMAIL_APP_PASSWORD 
             }
         });
 
-        // 3. Frontend eken ena Markdown (**bold**) HTML walata convert karanawa
+       
         let htmlBody = email_body.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        htmlBody = htmlBody.replace(/\n/g, '<br>'); // Line breaks HTML <br> karanawa
+        htmlBody = htmlBody.replace(/\n/g, '<br>'); 
 
         const fullHtml = `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -251,17 +251,15 @@ export const hireIntern = async (req, res) => {
         </div>
         `;
 
-        // 4. Attachments set karanawa
+        // 4. Add Attachments
         let emailAttachments = [];
 
         if (uploadedFile) {
-            // User upload karapu aluth file eka thiyenawa nam
             emailAttachments.push({
                 filename: uploadedFile.originalname,
-                content: uploadedFile.buffer // Memory eke thiyena file data eka kelinma yawanawa
+                content: uploadedFile.buffer 
             });
         } else if (use_default_attachment === 'true') {
-            // Default file eka yawanawa nam
             const defaultFilePath = path.join(__dirname, '../attachments/Trainee_Guidelines.pdf');
             if (fs.existsSync(defaultFilePath)) {
                 emailAttachments.push({
@@ -273,20 +271,20 @@ export const hireIntern = async (req, res) => {
             }
         }
 
-        // 5. Email eka yawanawa
+        // 4. Send the Email
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: internEmail,
             subject: email_subject,
-            text: email_body, // Fallback plain text
-            html: fullHtml,   // Format karapu HTML text eka
+            text: email_body, 
+            html: fullHtml,  
             attachments: emailAttachments
         };
 
         await transporter.sendMail(mailOptions);
         console.log(`Hiring email sent successfully to ${internEmail}`);
 
-        // 6. Database eke intern ge status eka saha details update karanawa
+        // 5. Update intern status to "Hired" in DB
         intern.status = 'Hired';
         intern.deadline_date = new Date(deadline_date);
         intern.email_subject = email_subject;
@@ -315,22 +313,18 @@ export const hireIntern = async (req, res) => {
 // HIRED INTERNS MANAGEMENT FUNCTIONS
 // ==========================================
 
-// 1. Hired interns lawa ganna (Pending hari Active hari)
+// 1. Get Hired Interns (Pending and Active)
 export const getHiredInterns = async (req, res) => {
     try {
         const { status, date } = req.query;
         
-        // Base query: Status eka 'Hired' wenna oni
         let query = { status: 'Hired' };
 
         if (status === 'pending') {
-            // Pending kiyanne thama accept karala nathi aya
             query.is_accepted = false;
         } else if (status === 'active') {
-            // Active kiyanne accept karapu aya
             query.is_accepted = true;
             
-            // Date filter ekak ewala thiyenawa nam eka check karanawa
             if (date) {
                 query.start_date = date;
             }
@@ -348,7 +342,7 @@ export const getHiredInterns = async (req, res) => {
     }
 };
 
-// 2. Documents verify karanna
+// 2. Verify the Documents
 export const verifyIntern = async (req, res) => {
     try {
         const internId = req.params.id;
@@ -371,7 +365,7 @@ export const verifyIntern = async (req, res) => {
     }
 };
 
-// 3. Start date eka set karala Accept karanna
+// 3. Set the start date and end date of the internship and mark as accepted 
 export const acceptIntern = async (req, res) => {
     try {
         const internId = req.params.id;
@@ -382,7 +376,7 @@ export const acceptIntern = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Intern not found' });
         }
 
-        // Internship period eka ("6 months" wage) kiyawala End Date eka auto hadanawa
+        // Create automatic end date for the internship period (Assume "6 months" )
         let months = 6; // Default to 6
         if (intern.internship_period) {
             const match = intern.internship_period.match(/\d+/);
@@ -393,7 +387,6 @@ export const acceptIntern = async (req, res) => {
         endDate.setMonth(endDate.getMonth() + months);
         const end_date_str = endDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
-        // Database eka update karanawa
         intern.is_accepted = true;
         intern.start_date = start_date;
         intern.end_date = end_date_str;

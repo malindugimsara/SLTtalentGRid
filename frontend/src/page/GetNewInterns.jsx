@@ -135,7 +135,6 @@ const GetNewInterns = () => {
                             </div>
                             
                             <h4 className="text-[#0b3c68] font-bold mb-3">Cover Letter / Message:</h4>
-                            {/* whitespace-pre-wrap thiyena nisa email eke thiyena paragraphs hariyata pennanawa */}
                             <div className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded-md border border-gray-200 leading-relaxed">
                                 {selectedIntern.body || "No message content provided."}
                             </div>

@@ -287,7 +287,7 @@ const HiredInterns = () => {
                         type="text"
                         placeholder="Search active interns..."
                         value={activeSearchTerm}
-                        onChange={(e) => setActiveSearchTerm(e.target.value)} // 👈 Meka danna
+                        onChange={(e) => setActiveSearchTerm(e.target.value)} 
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all"
                     />
                   </div>
@@ -342,8 +342,8 @@ const HiredInterns = () => {
                             <div className="text-xs text-blue-600 truncate w-32" title={intern.email}>{intern.email || "N/A"}</div>
                           </td>
                           <td className="px-6 py-4 font-medium">{intern.internship_period ? `${intern.internship_period} months` : "N/A"}</td>
-                          <td className="px-6 py-4 font-bold text-green-700">{intern.start_date || "N/A"}</td>
-                          <td className="px-6 py-4 font-bold text-red-600">{intern.end_date || "N/A"}</td>
+                          <td className="px-6 py-4 font-bold text-green-700">{intern.start_date ? new Date(intern.start_date).toISOString().split("T")[0] : "N/A"}</td>
+                          <td className="px-6 py-4 font-bold text-red-600">{intern.end_date ? new Date(intern.end_date).toISOString().split("T")[0] : "N/A"}</td>
                         </tr>
                       ))}
                     </tbody>

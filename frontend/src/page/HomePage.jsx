@@ -7,6 +7,7 @@ import GetNewInterns from "./GetNewInterns";
 import HireNewInterns from "./HireNewInterns";
 import ShortlistedInterns from "./ShortlistedIntern";
 import HiredInterns from "./HiredIntern";
+import RankedCV from "./EnhancedFiltering";
 
 export default function HomePage(){
     return(
@@ -18,6 +19,7 @@ export default function HomePage(){
                 <Route path='/hire-new-interns' element={<HireNewInterns />}/>
                 <Route path='/shortlisted-interns' element={<ShortlistedInterns />}/>
                 <Route path='/hired-interns' element={<HiredInterns />}/>
+                <Route path='/rank_cvs' element={<RankedCV />}/>
             </Routes>
             <Footer />
         </div>
