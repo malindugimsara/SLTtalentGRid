@@ -22,7 +22,7 @@ const NavBar = () => {
   }, []);
 
   const handleSignOut = () => {
-    navigate("");
+    navigate("/");
   };
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
