@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const RankedCV = () => {
   const location = useLocation();
@@ -58,11 +59,11 @@ const RankedCV = () => {
       const internId = intern._id || intern.cvId; // Fallback based on backend response
       await api.put(`/update-status/${internId}`, { status: 'Shortlisted' });
       
-      alert(`${intern.name || "Candidate"} has been shortlisted.`);
+      toast.success(`${intern.name || "Candidate"} has been shortlisted.`);
       setInterns(interns.filter(i => (i._id || i.cvId) !== internId));
     } catch (err) {
       console.error("Error shortlisting intern:", err.response?.data || err.message);
-      alert("Failed to shortlist candidate.");
+      toast.error("Failed to shortlist candidate.");
     }
   };
 
@@ -72,11 +73,11 @@ const RankedCV = () => {
       const internId = intern._id || intern.cvId;
       await api.put(`/update-status/${internId}`, { status: 'Rejected' });
       
-      alert(`${intern.name || "Candidate"} has been rejected.`);
+      toast.success(`${intern.name || "Candidate"} has been rejected.`);
       setInterns(interns.filter(i => (i._id || i.cvId) !== internId));
     } catch (err) {
       console.error("Error removing intern:", err.response?.data || err.message);
-      alert("Failed to remove candidate.");
+      toast.error("Failed to remove candidate.");
     }
   };
 

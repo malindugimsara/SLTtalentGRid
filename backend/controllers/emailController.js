@@ -50,7 +50,7 @@ const extractTextFromPDF = async (pdfBuffer) => {
     }
 };
 
-// 2. Gemini AI eken Data extract karana function (Direct REST API Method - NO SDK USED)
+
 const extractInternDataWithAI = async (emailText, cvText) => {
     try {
         const apiKey = process.env.GEMINI_API_KEY;
@@ -60,8 +60,8 @@ const extractInternDataWithAI = async (emailText, cvText) => {
             return null;
         }
 
-       // gemini-pro kiyana eka ain karala meka danna:
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
         const prompt = `
         You are an expert HR assistant. Read the following Email Text and CV Text sent by an internship applicant.
@@ -126,8 +126,9 @@ export const fetchEmails = async (req, res) => {
             host: 'imap.gmail.com',
             port: 993,
             tls: true,
-            tlsOptions: { rejectUnauthorized: false, minVersion: 'TLSv1.2' },
-            authTimeout: 3000
+            authTimeout: 30000,
+            connTimeout: 30000,
+            tlsOptions: { rejectUnauthorized: false, minVersion: 'TLSv1.2' }
         }
     };
 
