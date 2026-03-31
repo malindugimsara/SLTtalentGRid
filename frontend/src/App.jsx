@@ -4,6 +4,7 @@ import InternshipManagement from './page/GetNewInterns'
 import { Toaster } from 'react-hot-toast'
 import LoginPage from './page/loginPage'
 import HomePage from './page/HomePage'
+import ProtectedRoute from './component/ProtectedRoute'
 
 function App() {
  
@@ -15,7 +16,11 @@ function App() {
 
         <Routes path='/*'>
           <Route path='/' element={<LoginPage />}/>
-          <Route path='/*' element={<HomePage />}/>
+          <Route path='/*' element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }/>
         </Routes>
 
       </BrowserRouter>

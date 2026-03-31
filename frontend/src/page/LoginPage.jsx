@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import {useLocation, useNavigate } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
+import axios from "axios";
 
 export default function LoginPage() {
   const location = useLocation();
@@ -22,16 +23,61 @@ export default function LoginPage() {
 
   function handleLogin() {
     
-    // ✅ HARD-CODED CHECK
-    if (email === "digitalplatforms@slt.lk" && password === "digitalplatform@456") {
-      setShowSpinner(true);
-      navigate("/home"); // Go to home page
-      toast.success("Login successful!");
-    } else {
-      setShowSpinner(false);
-      toast.error("Invalid email or password");
-    }
+    // // ✅ HARD-CODED CHECK
+    // if (email === "digitalplatforms@slt.lk" && password === "digitalplatform@456") {
+    //   setShowSpinner(true);
+    //   navigate("/home"); // Go to home page
+    //   toast.success("Login successful!");
+    // } else {
+    //   setShowSpinner(false);
+    //   toast.error("Invalid email or password");
+    // }
 
+    setShowSpinner(true);
+    axios
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/user/login", {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        const token = response.data.token;
+        const user = response.data.user;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: user.email,
+            name: user.name,
+            address: user.address,
+            role: user.role,
+          })
+        );
+
+        switch (user.role?.toLowerCase()) {
+          case "admin":
+            navigate("/admin");
+            toast.success("Login successful!");
+            break;
+          case "user":
+            navigate("/home");
+            toast.success("Login successful!");
+            break;
+          default:
+            toast.error("Unknown role: " + user.role);
+            setShowSpinner(false);
+            break;
+        }
+        localStorage.setItem("name", response.data.user.name);
+        localStorage.setItem("email", response.data.user.email);
+        localStorage.setItem("phoneNumber", response.data.user.phoneNumber);
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        toast.error(error.response?.data?.message || "Login failed. Please try again.");
+        setPassword("");
+        setShowSpinner(false);
+      });
   }
   
   return (
@@ -39,7 +85,7 @@ export default function LoginPage() {
       {/* Left Side - Logo Section */}
       <div className="w-full lg:w-1/2 min-h-[25vh] lg:min-h-[40vh] lg:h-screen flex lg:flex-col items-center justify-center gap-4">
         <img src="/logo_loginPage.png" alt="logo" className="w-40 md:w-60 lg:w-140 lg:h-70 ml-5" />
-        <h1 className="text-3xl lg:text-5xl mt-5 font-bold text-[#2C3E50]">Intern Hiring System</h1>
+        <h1 className="text-3xl lg:text-5xl mt-5 ml-15 font-bold text-[#2C3E50]">Intern Hiring System</h1>
         
       </div>
 
