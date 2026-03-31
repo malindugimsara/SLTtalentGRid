@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import InternshipManagement from './page/GetNewInterns'
 import { Toaster } from 'react-hot-toast'
-import LoginPage from './page/loginPage'
+import LoginPage from './page/LoginPage'
 import HomePage from './page/HomePage'
 import ProtectedRoute from './component/ProtectedRoute'
 
